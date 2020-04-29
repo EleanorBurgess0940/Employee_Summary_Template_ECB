@@ -14,28 +14,38 @@ function createManager() {
   return inquirer.prompt([
     {
       type: "input",
-      name: "managerName",
+      name: "name",
       message: "What is your Manager's Name?",
     },
     {
       type: "input",
-      name: "managersID",
+      name: "id",
       message: "What is your Manager's Id?",
     },
     {
       type: "input",
-      name: "managersEmail",
+      name: "email",
       message: "What is your Manager's email?",
     },
     {
       type: "input",
-      name: "title",
+      name: "officeNumber",
       message: "What is your Manager's Office number?",
     },
   ]);
 }
 
-createManager();
+async function init() {
+  try {
+    const manager = await createManager();
+
+    console.log(manager);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+init();
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 

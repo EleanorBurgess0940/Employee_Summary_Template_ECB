@@ -19,3 +19,4 @@ class employee {
     return "Employee";
   }
 }
+module.exports = employee;
