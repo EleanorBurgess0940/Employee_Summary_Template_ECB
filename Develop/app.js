@@ -1,16 +1,19 @@
 const Manager = require("./lib/Manager");
-//const Engineer = require("./lib/Engineer");
-//const Intern = require("./lib/Intern");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const util = require("util");
+const writeFileAsync = util.promisify(fs.writeFile);
 
-//const OUTPUT_DIR = path.resolve(__dirname, "output");
-//const outputPath = path.join(OUTPUT_DIR, "team.html");
+const OUTPUT_DIR = path.resolve(__dirname, "output");
+const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-//const render = require("./lib/htmlRenderer");
+const employees = [];
+const render = require("./lib/htmlRenderer");
 
-function createManager() {
+function createTeam() {
   return inquirer.prompt([
     {
       type: "input",
@@ -32,14 +35,30 @@ function createManager() {
       name: "officeNumber",
       message: "What is your Manager's Office number?",
     },
+    {
+      type: "list",
+      name: "teamMemberType",
+      message: "Which type of team member would you like to add?",
+      choices: [
+        "Engineer",
+        "Intern",
+        "I don't want to add any more team members",
+      ],
+    },
   ]);
 }
 
 async function init() {
   try {
-    const manager = await createManager();
+    const answers = await createTeam();
 
-    console.log(manager);
+    console.log(answers);
+
+    const newHTML = render(employees);
+
+    await writeFileAsync(outputPath, newHTML);
+
+    console.log("Well done! You created your teams HTML!");
   } catch (err) {
     console.log(err);
   }
