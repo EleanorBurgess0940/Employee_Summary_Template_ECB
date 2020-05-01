@@ -10,55 +10,144 @@ const writeFileAsync = util.promisify(fs.writeFile);
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-const employees = [];
+const employeesArray = [];
 const render = require("./lib/htmlRenderer");
 
+function getManager() {
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "managerName",
+        message: "What is your Manager's Name?",
+      },
+      {
+        type: "input",
+        name: "managerID",
+        message: "What is your Manager's Id?",
+      },
+      {
+        type: "input",
+        name: "managerEmail",
+        message: "What is your Manager's email?",
+      },
+      {
+        type: "input",
+        name: "managerOfficeNumber",
+        message: "What is your Manager's Office number?",
+      },
+    ])
+    .then((answers) => {
+      const manager = new Manager(
+        answers.managerName,
+        answers.managerId,
+        answers.managerEmail,
+        answers.managerOfficeNumber
+      );
+      employeesArray.push(manager);
+      createTeam();
+    });
+}
 function createTeam() {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is your Manager's Name?",
-    },
-    {
-      type: "input",
-      name: "id",
-      message: "What is your Manager's Id?",
-    },
-    {
-      type: "input",
-      name: "email",
-      message: "What is your Manager's email?",
-    },
-    {
-      type: "input",
-      name: "officeNumber",
-      message: "What is your Manager's Office number?",
-    },
-    {
-      type: "list",
-      name: "teamMemberType",
-      message: "Which type of team member would you like to add?",
-      choices: [
-        "Engineer",
-        "Intern",
-        "I don't want to add any more team members",
-      ],
-    },
-  ]);
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "teamMember",
+        message: "What is next team member role?",
+        choices: ["Engineer", "Intern", "My team is complete"],
+      },
+    ])
+    .then((userChoice) => {
+      switch (userChoice.teamMember) {
+        case "Engineer":
+          getEngineer();
+          break;
+        case "Intern":
+          getIntern();
+          break;
+      }
+    });
+}
+
+function getEngineer() {
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "engineerName",
+        message: "What is your engineer's Name?",
+      },
+      {
+        type: "input",
+        name: "engineerID",
+        message: "What is your engineer's Id?",
+      },
+      {
+        type: "input",
+        name: "engineerEmail",
+        message: "What is your engineer's email?",
+      },
+      {
+        type: "input",
+        name: "engineerGithubUsername",
+        message: "What is your engineer's Github username?",
+      },
+    ])
+    .then((answers) => {
+      const engineer = new Engineer(
+        answers.engineerName,
+        answers.engineerId,
+        answers.engineerEmail,
+        answers.engineerGithubUsername
+      );
+      employeesArray.push(engineer);
+      console.log(employeesArray);
+      createTeam();
+    });
+}
+
+function getIntern() {
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "internName",
+        message: "What is your intern's Name?",
+      },
+      {
+        type: "input",
+        name: "internID",
+        message: "What is your intern's Id?",
+      },
+      {
+        type: "input",
+        name: "internEmail",
+        message: "What is your intern's email?",
+      },
+      {
+        type: "input",
+        name: "internSchool",
+        message: "What is your intern's attending school?",
+      },
+    ])
+    .then((answers) => {
+      const intern = new Intern(
+        answers.internName,
+        answers.internId,
+        answers.internEmail,
+        answers.internGithubUsername
+      );
+      employeesArray.push(intern);
+      console.log(employeesArray);
+      createTeam();
+    });
 }
 
 async function init() {
   try {
-    const answers = await createTeam();
-
-    console.log(answers);
-
-    const newHTML = render(employees);
-
-    await writeFileAsync(outputPath, newHTML);
-
-    console.log("Well done! You created your teams HTML!");
+    getManager();
+    console.log(employeesArray);
   } catch (err) {
     console.log(err);
   }
