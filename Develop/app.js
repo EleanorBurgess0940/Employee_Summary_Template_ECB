@@ -23,7 +23,7 @@ function getManager() {
       },
       {
         type: "input",
-        name: "managerID",
+        name: "managerId",
         message: "What is your Manager's Id?",
       },
       {
@@ -66,6 +66,8 @@ function createTeam() {
         case "Intern":
           getIntern();
           break;
+        default:
+          buildTeam();
       }
     });
 }
@@ -80,7 +82,7 @@ function getEngineer() {
       },
       {
         type: "input",
-        name: "engineerID",
+        name: "engineerId",
         message: "What is your engineer's Id?",
       },
       {
@@ -102,7 +104,6 @@ function getEngineer() {
         answers.engineerGithubUsername
       );
       employeesArray.push(engineer);
-      console.log(employeesArray);
       createTeam();
     });
 }
@@ -117,7 +118,7 @@ function getIntern() {
       },
       {
         type: "input",
-        name: "internID",
+        name: "internId",
         message: "What is your intern's Id?",
       },
       {
@@ -136,18 +137,20 @@ function getIntern() {
         answers.internName,
         answers.internId,
         answers.internEmail,
-        answers.internGithubUsername
+        answers.internSchool
       );
       employeesArray.push(intern);
-      console.log(employeesArray);
       createTeam();
     });
+}
+
+function buildTeam() {
+  fs.writeFileSync(outputPath, render(employeesArray), "utf-8");
 }
 
 async function init() {
   try {
     getManager();
-    console.log(employeesArray);
   } catch (err) {
     console.log(err);
   }
