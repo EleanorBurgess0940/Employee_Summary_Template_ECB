@@ -1,3 +1,4 @@
+// various variables needed //
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
@@ -10,9 +11,11 @@ const writeFileAsync = util.promisify(fs.writeFile);
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
+// empty array that is to be filled with manager and other employees //
 const employeesArray = [];
 const render = require("./lib/htmlRenderer");
 
+//creates a manager and sends it to the array //
 function getManager() {
   return inquirer
     .prompt([
@@ -48,6 +51,8 @@ function getManager() {
       createTeam();
     });
 }
+
+//prompts the user to choose engineer and intern or that the team is complete//
 function createTeam() {
   inquirer
     .prompt([
@@ -72,6 +77,7 @@ function createTeam() {
     });
 }
 
+//creates a engineer and sends it to the array //
 function getEngineer() {
   return inquirer
     .prompt([
@@ -108,6 +114,7 @@ function getEngineer() {
     });
 }
 
+//creates a intern and sends it to the array //
 function getIntern() {
   return inquirer
     .prompt([
@@ -144,6 +151,7 @@ function getIntern() {
     });
 }
 
+//renders the html//
 function buildTeam() {
   fs.writeFileSync(outputPath, render(employeesArray), "utf-8");
 }
