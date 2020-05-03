@@ -1,3 +1,4 @@
+/*styling of the header */
 .jumbotron {
   background-color: lightgreen;
   color: #ffffff;
@@ -8,10 +9,12 @@
   font-weight: bold;
 }
 
+/*styling of the background */
 body {
   background-color: #f6fbff;
 }
 
+/*styling of the cards */
 .card {
   width: 500px;
   margin: 10px;

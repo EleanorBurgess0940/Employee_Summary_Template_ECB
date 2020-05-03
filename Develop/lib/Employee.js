@@ -1,4 +1,6 @@
 // TODO: Write code to define and export the Employee class
+
+//class for employee extendable to engineer manager and intern//
 class employee {
   constructor(name, id, email, title) {
     this.name = name;
